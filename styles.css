@@ -103,6 +103,11 @@ canvas{
     left: 50%;
     transform: translateX(-50%);
 }
+.headerFlex div{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
 .backgroundCanvas{
     margin: 0;
     padding: 0;
