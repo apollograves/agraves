@@ -31,14 +31,14 @@ const fetchTbaData = async (teamNumber) => {
 
 const fetchStatboticsEPA = async (teamNumber) => {
     try {
-        const response = await fetch(`${statboticsAPIUrl}/team/${teamNumber}`)
+        const response = await fetch(`${statboticsAPIUrl}/team_year/${teamNumber}/2025`)
 
         if (!response.ok) {
             throw new Error(`Error: ${response.status}`);
         }
 
         const data = await response.json();
-        return data.norm_epa.current;
+        return data.epa.total_points.mean;
     } catch (error) {
         console.error("Failed to fetch team data:", error);
         return 0;
@@ -161,7 +161,7 @@ const fetchTeamMatches = async (teamNumber, eventKey) => {
 let eventDataOrder = {
     NAME: 0,
     NUMBER: 1,
-    NORMALIZED_EPA: 2,
+    EPA: 2,
     RANK: 3,
     WIN_LOSS: 4,
     RP_AVG: 5,
@@ -175,7 +175,7 @@ function printEventData(teamData){
         let row = eventTable.insertRow();
         row.insertCell(eventDataOrder.NAME).innerHTML = team.name;
         row.insertCell(eventDataOrder.NUMBER).innerHTML = team.number;
-        row.insertCell(eventDataOrder.NORMALIZED_EPA).innerHTML = team.normalizedEPA; // Formatting EPA to 2 decimal places
+        row.insertCell(eventDataOrder.EPA).innerHTML = team.EPA; // Formatting EPA to 2 decimal places
         row.insertCell(eventDataOrder.RANK).innerHTML = team.rank;
         row.insertCell(eventDataOrder.WIN_LOSS).innerHTML = team.winLoss;
         row.insertCell(eventDataOrder.RP_AVG).innerHTML = team.rpAvg;
@@ -240,7 +240,7 @@ async function addTeamData(teamNumber)  {
         teamData.push({
             name: team.nickname,
             number: team.team_number,
-            normalizedEPA: statboticsData,
+            EPA: statboticsData,
             rank: teamStatus?.qual?.ranking?.rank || "N/A",
             winLoss: winLoss,
             rpAvg: parseFloat(teamStatus?.qual?.ranking?.sort_orders[0] || 0)?.toFixed(2),
@@ -296,7 +296,7 @@ async function addTeamData(teamNumber)  {
     eventTable.innerHTML = "";
     matchTable.innerHTML = "";
 
-    teamData.forEach(team => {if(team.normalizedEPA === 0) team.normalizedEPA = "unknown"})
+    teamData.forEach(team => {if(team.EPA === 0) team.EPA = "unknown"})
 
     printEventData(teamData);
     printMatchData(matchData);
@@ -309,7 +309,7 @@ function sortTeamData(column) {
         currentSort.ascending = !currentSort.ascending;
     } else {
         currentSort.column = column;
-        currentSort.ascending = !(column === 'normalizedEPA' || column === 'winLoss' || column === 'rpAvg'
+        currentSort.ascending = !(column === 'EPA' || column === 'winLoss' || column === 'rpAvg'
             || column === 'coopAvg' || column === 'matchAvg' );
     }
 
@@ -345,7 +345,7 @@ textBox.addEventListener("keydown", async (event) => {
         isLoading = true;
         textBox.disabled = true;
         teamNumberLoader.hidden = false
-        await addTeamData(textBox.value).then(() => sortTeamData("normalizedEPA"));
+        await addTeamData(textBox.value).then(() => sortTeamData("EPA"));
         teamNumberLoader.hidden = true
         isLoading = false;
         textBox.disabled = false;
