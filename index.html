@@ -24,23 +24,43 @@
     </div>
     <script>
         const buttons = [
-            { text: "Game of Life", url: "game-of-life/game.html?v=1" },
-            { text: "Graphing Calculator", url: "graphing-calculator/graphing-calculator.html?v=1" },
-            { text: "FRC Event Tool", url: "frc-event-tool/frc-event-tool.html?v=1" },
-            { text: "Melvor Idle Store Search Mod", url: "https://mod.io/g/melvoridle/m/storesearch" },
-            { text: "FRC 1778 2024 Robot Code", url: "https://github.com/FIRST1778/2024-Robot-Code-Public"},
-            { text: "FRC 1778 2025 Robot Code", url: "https://github.com/FIRST1778/2025-Robot-Code-Public" }
+            {
+                name: "FIRST Robotics Competition",
+                links: [
+                    { text: "FRC 1778 2025 Robot Code", url: "https://github.com/FIRST1778/2025-Robot-Code-Public" },
+                    { text: "FRC 1778 2024 Robot Code", url: "https://github.com/FIRST1778/2024-Robot-Code-Public"},
+                ]
+            },
+            {
+                name: "Games & Mods",
+                links: [
+                    { text: "Game of Life", url: "game-of-life/game.html?v=1" },
+                    { text: "Melvor Idle Store Search Mod", url: "https://mod.io/g/melvoridle/m/storesearch" },
+                ]
+            },
+            {
+                name: "Tools",
+                links: [
+                    { text: "FRC Event Tool", url: "frc-event-tool/frc-event-tool.html?v=1" },
+                    { text: "Graphing Calculator", url: "graphing-calculator/graphing-calculator.html?v=1" },
+                ]
+            }
         ];
 
         document.addEventListener("DOMContentLoaded", () => {
             const container = document.getElementById("button-container");
-            buttons.forEach(({ text, url }) => {
-                const button = document.createElement("button");
-                button.textContent = text;
-                button.className = "defaultButton";
-                button.onclick = () => (location.href = url);
-                container.appendChild(button);
-            });
+            buttons.forEach(({name, links}) => {
+                const subContainer = document.createElement("button-subcontainer");
+                subContainer.appendChild(document.createElement("h2")).textContent = name;
+                links.forEach(({ text, url }) => {
+                    const button = document.createElement("button");
+                    button.textContent = text;
+                    button.className = "defaultButton";
+                    button.onclick = () => (location.href = url);
+                    subContainer.appendChild(button);
+                })
+                container.appendChild(subContainer);
+            })
         });
     </script>
     <div id="button-container" class="projectButtons"></div>
