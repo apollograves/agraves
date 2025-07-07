@@ -24,7 +24,16 @@ h2{
     margin-bottom: 5px;
     margin-top: 5px;
 }
-.socialLinks{
+
+h3.category-header {
+    font-size: large;
+    font-weight: normal;
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: 20px;
+    color: var(--secondColor);
+}
+.social-links{
     display: flex;
     flex-direction: row;
     gap: 15px;
@@ -60,6 +69,7 @@ button{
     transition: 0.3s;
     cursor: pointer;
 }
+
 button:hover {background-color: var(--fourthColor);}
 
 .projectButtons{
@@ -78,21 +88,31 @@ button:hover {background-color: var(--fourthColor);}
 
 .grid-container {
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 10px;
-    width: 500px;
+    max-width: 60%;
+    width: fit-content;
+    background: var(--firstColor);
+    mask-image:
+            linear-gradient(to top, transparent, black 25px),
+            linear-gradient(to bottom, transparent, black 25px),
+            linear-gradient(to left, transparent, black 25px),
+            linear-gradient(to right, transparent, black 25px);
+    mask-composite: intersect;
+    padding: 15px;
+    line-height: 30px;
 }
 .grid-container div{
-    background: var(--firstColor);
-    padding: 20px;
-    border: 2px solid var(--secondColor);
+    padding: 5px 5px 5px;
     text-align: center;
     border-radius: 10px;
+    min-width: 100px;
 }
 
-.grid-container img{
-    height: 70px;
+.grid-container i{
+    font-size: 90px;
 }
 
 canvas{

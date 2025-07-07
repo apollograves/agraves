@@ -4,104 +4,194 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
     <meta charset="UTF-8">
     <title>Apollo Graves</title>
     <link rel="stylesheet" href="styles.css?v=8">
 </head>
 <body>
-    <canvas id="bgCanvas" width="720" height="720" class="backgroundCanvas"></canvas>
-    <script src="animated-background.js?v=1"></script>
-    <div class="headerFlex">
-        <h1>Apollo's Projects</h1>
-        <div>
-            <a href="https://www.linkedin.com/in/apollograves/">
-                <img src="images/linkedin-logo.webp" alt="LinkedIn" width="50" height="50">
-            </a>
-            <a href="https://github.com/apollograves">
-                <img src="images/github-mark-white.svg" alt="GitHub" width="50" height="50">
-            </a>
-        </div>
+<canvas id="bgCanvas" width="720" height="720" class="backgroundCanvas"></canvas>
+<script src="animated-background.js?v=1"></script>
+<div class="headerFlex">
+    <h1>Apollo's Projects</h1>
+    <div>
+        <a href="https://www.linkedin.com/in/apollograves/">
+            <img src="images/linkedin-logo.webp" alt="LinkedIn" width="50" height="50">
+        </a>
+        <a href="https://github.com/apollograves">
+            <img src="images/github-mark-white.svg" alt="GitHub" width="50" height="50">
+        </a>
     </div>
-    <script>
-        const buttons = [
-            {
-                name: "FIRST Robotics Competition",
-                links: [
-                    { text: "FRC 1778 2025 Robot CAD & Code", url: "https://www.chiefdelphi.com/t/1778-2025-cad-code-release/501460" },
-                    { text: "FRC 1778 2024 Robot CAD & Code", url: "https://www.chiefdelphi.com/t/1778-cad-code-release/466727"},
-                ]
-            },
-            {
-                name: "Games & Mods",
-                links: [
-                    { text: "Game of Life", url: "game-of-life/game.html?v=1" },
-                    { text: "Melvor Idle Store Search Mod", url: "https://mod.io/g/melvoridle/m/storesearch" },
-                ]
-            },
-            {
-                name: "Models",
-                links: [
-                    { text: "Makerworld", url: "https://makerworld.com/en/@apollograves/profile"}
-                ]
-            },
-            {
-                name: "Tools",
-                links: [
-                    { text: "FRC Event Tool", url: "frc-event-tool/frc-event-tool.html?v=1" },
-                    { text: "Graphing Calculator", url: "graphing-calculator/graphing-calculator.html?v=1" },
-                ]
-            },
-        ];
+</div>
+<script>
+    const buttons = [
+        {
+            name: "FIRST Robotics Competition",
+            links: [
+                { text: "FRC 1778 2025 Robot CAD & Code", url: "https://www.chiefdelphi.com/t/1778-2025-cad-code-release/501460" },
+                { text: "FRC 1778 2024 Robot CAD & Code", url: "https://www.chiefdelphi.com/t/1778-cad-code-release/466727"},
+            ]
+        },
+        {
+            name: "Games & Mods",
+            links: [
+                { text: "Game of Life", url: "game-of-life/game.html?v=1" },
+                { text: "Melvor Idle Store Search Mod", url: "https://mod.io/g/melvoridle/m/storesearch" },
+            ]
+        },
+        {
+            name: "Models",
+            links: [
+                { text: "Makerworld", url: "https://makerworld.com/en/@apollograves/profile"}
+            ]
+        },
+        {
+            name: "Tools",
+            links: [
+                { text: "FRC Event Tool", url: "frc-event-tool/frc-event-tool.html?v=1" },
+                { text: "Graphing Calculator", url: "graphing-calculator/graphing-calculator.html?v=1" },
+            ]
+        },
+    ];
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const container = document.getElementById("button-container");
-            buttons.forEach(({name, links}) => {
-                const subContainer = document.createElement("button-subcontainer");
-                subContainer.appendChild(document.createElement("h2")).textContent = name;
-                links.forEach(({ text, url }) => {
-                    const button = document.createElement("button");
-                    button.textContent = text;
-                    button.className = "defaultButton";
-                    button.onclick = () => (location.href = url);
-                    subContainer.appendChild(button);
-                })
-                container.appendChild(subContainer);
+    document.addEventListener("DOMContentLoaded", () => {
+        const container = document.getElementById("button-container");
+        buttons.forEach(({name, links}) => {
+            const subContainer = document.createElement("button-subcontainer");
+            subContainer.appendChild(document.createElement("h2")).textContent = name;
+            links.forEach(({ text, url }) => {
+                const button = document.createElement("button");
+                button.textContent = text;
+                button.className = "defaultButton";
+                button.onclick = () => (location.href = url);
+                subContainer.appendChild(button);
             })
-        });
-    </script>
-    <div id="button-container" class="projectButtons"></div>
-    <h2>Languages</h2>
+            container.appendChild(subContainer);
+        })
+    });
+</script>
+<div id="button-container" class="projectButtons"></div>
+
+<div class="centeredFlex">
+    <h1>Experience</h1>
+</div>
+<div class="experience-container">
+    <h2 class="category-header">Languages</h2>
     <div class="grid-container">
         <div>
-            <img src="images/cpp-logo.png" alt="">
-            <br/>
-            C++
+            <i class="devicon-cplusplus-plain"></i>
+            <br/> C++
         </div>
         <div>
-            <img src="images/kotlin-logo.png" alt="">
-            <br/>
-            Kotlin
+            <i class="devicon-kotlin-plain colored"></i>
+            <br/> Kotlin
         </div>
         <div>
-            <img src="images/java-logo.png" alt="">
-            <br/>
-            Java
+            <i class="devicon-java-plain colored"></i>
+            <br/> Java
         </div>
         <div>
-            <img src="images/python-logo.png" alt="">
-            <br/>
-            Python
+            <i class="devicon-python-plain colored"></i>
+            <br/> Python
         </div>
         <div>
-            <img src="images/javascript-logo.webp" alt="">
-            <br/>
-            Javascript
+            <i class="devicon-javascript-plain colored"></i>
+            <br/> JavaScript
         </div>
         <div>
-            <img src="images/html-logo.png" alt="">
-            <br/>
-            HTML
+            <i class="devicon-dart-plain colored"></i>
+            <br/> Dart
+        </div>
+        <div>
+            <i class="devicon-html5-plain colored"></i>
+            <br/> HTML
+        </div>
+        <div>
+            <i class="devicon-css3-plain colored"></i>
+            <br/> CSS
+        </div>
+        <div>
+            <i class="devicon-react-plain colored"></i>
+            <br/> React
         </div>
     </div>
+
+    <h2 class="category-header">Frameworks & Platforms</h2>
+    <div class="grid-container">
+        <div>
+            <i class="devicon-flutter-plain colored"></i>
+            <br/> Flutter
+        </div>
+        <div>
+            <i class="devicon-firebase-plain colored"></i>
+            <br/> Firebase
+        </div>
+        <div>
+            <i class="devicon-amazonwebservices-plain-wordmark colored"></i>
+            <br/> AWS
+        </div>
+        <div>
+            <i class="devicon-nodejs-plain colored"></i>
+            <br/> Node.js
+        </div>
+        <div>
+            <i class="devicon-cloudflare-plain colored"></i>
+            <br/> Cloudflare
+        </div>
+    </div>
+
+    <h2 class="category-header">Tools & Software</h2>
+    <div class="grid-container">
+        <div>
+            <i class="devicon-git-plain colored"></i>
+            <br/> Git
+        </div>
+        <div>
+            <i class="devicon-visualstudio-plain colored"></i>
+            <br/> Visual Studio
+        </div>
+        <div>
+            <i class="devicon-jetbrains-plain colored"></i>
+            <br/> JetBrains
+        </div>
+        <div>
+            <i class="devicon-gradle-plain"></i>
+            <br/> Gradle
+        </div>
+        <div>
+            <i class="devicon-vim-plain colored"></i>
+            <br/> Vim
+        </div>
+    </div>
+
+    <h2 class="category-header">Others</h2>
+    <div class="grid-container">
+        <div>
+            <img src="images/onshape-logo.webp" height="83"/>
+            <br/> Onshape
+        </div>
+        <div>
+            <i class="devicon-blender-original colored"></i>
+            <br/> Blender
+        </div>
+        <div>
+            <i class="devicon-linux-plain colored"></i>
+            <br/> Linux
+        </div>
+        <div>
+            <i class="devicon-archlinux-plain colored"></i>
+            <br/> Arch Linux
+        </div>
+        <div>
+            <i class="devicon-raspberrypi-plain colored"></i>
+            <br/> Raspberry Pi
+        </div>
+        <div>
+            <i class="devicon-arduino-plain colored"></i>
+            <br/> Arduino
+        </div>
+    </div>
+
+</div>
 </body>
 </html>
