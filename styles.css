@@ -5,6 +5,11 @@
     --fourthColor: rgba(80, 151, 202, 0.7);
 }
 
+body.light-mode{
+    --firstColor: #eaeaea;
+    --secondColor: #424242;
+}
+
 body{
     background: var(--firstColor);
     color: var(--secondColor);
@@ -181,4 +186,26 @@ input{
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+button.iconButton{
+    background: none;
+    background-color: transparent;
+    border: none;
+    color: var(--secondColor);
+    font-size: 32px;
+    margin-left: 10px;
+    padding: 0;
+    transition: color 0.3s;
+    cursor: pointer;
+}
+
+button.iconButton:hover{
+    background: none;
+    background-color: transparent;
+    color: var(--thirdColor);
+}
+
+body.light-mode #github-icon{
+    filter: invert(1);
 }

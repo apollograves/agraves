@@ -7,7 +7,7 @@
     <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
     <meta charset="UTF-8">
     <title>Apollo Graves</title>
-    <link rel="stylesheet" href="styles.css?v=9">
+    <link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
 <canvas id="bgCanvas" width="720" height="720" class="backgroundCanvas"></canvas>
@@ -19,8 +19,9 @@
             <img src="images/linkedin-logo.webp" alt="LinkedIn" width="50" height="50">
         </a>
         <a href="https://github.com/apollograves">
-            <img src="images/github-mark-white.svg" alt="GitHub" width="50" height="50">
+            <img id="github-icon" src="images/github-mark-white.svg" alt="GitHub" width="50" height="50">
         </a>
+        <button id="theme-toggle" class="iconButton" aria-label="Toggle theme">☀️</button>
     </div>
 </div>
 <script>
@@ -68,6 +69,25 @@
             })
             container.appendChild(subContainer);
         })
+
+        const toggleButton = document.getElementById("theme-toggle");
+        const updateCanvasColors = () => {
+            firstColor = getComputedStyle(document.documentElement).getPropertyValue('--firstColor');
+            secondColor = getComputedStyle(document.documentElement).getPropertyValue('--secondColor');
+            thirdColor = getComputedStyle(document.documentElement).getPropertyValue('--thirdColor');
+        };
+        const setTheme = (light) => {
+            document.body.classList.toggle("light-mode", light);
+            toggleButton.textContent = light ? "🌙" : "☀️";
+            updateCanvasColors();
+        };
+        const savedTheme = localStorage.getItem("theme") === "light";
+        setTheme(savedTheme);
+        toggleButton.addEventListener("click", () => {
+            const light = !document.body.classList.contains("light-mode");
+            localStorage.setItem("theme", light ? "light" : "dark");
+            setTheme(light);
+        });
     });
 </script>
 <div id="button-container" class="projectButtons"></div>
