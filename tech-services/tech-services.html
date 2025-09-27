@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apollo's Tech Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css?v=9">
+    <style>
+        .service-category h2 {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 500;
+            background-color: #3a7ab8;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 1.5rem;
+            border-bottom: none;
+        }
+        .service-price {
+            color: #5097ca !important;
+            margin-bottom: 5px;
+        }
+
+        .service-price-note {
+            color: #5097ca;
+            font-size: 0.9em;
+            margin-top: 0;
+            font-style: italic;
+        }
+
+        .price-container {
+            margin-bottom: 10px;
+        }
+        .service-image {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .service-card {
+            display: flex;
+            flex-direction: column;
+            border-radius: 20px;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio (9 / 16 = 0.5625 or 56.25%) */
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1 style="color: white; font-size: 2.5rem;">Apollo's Tech Services</h1>
+
+<div id="services-container" class="services-container">
+    <!-- Service categories will be dynamically loaded here -->
+</div>
+
+<script>
+    // Service categories data structure
+    const serviceCategories = [
+        {
+            name: "Computer Services",
+            services: [
+                {
+                    title: "Full Custom Desktop PC Building",
+                    price: "$100",
+                    description: "Complete custom PC build service including hardware selection, assembly, and testing.",
+                    imageUrl: "../images/services/pc-building.jpg"
+                },
+                {
+                    title: "Desktop PC Hardware Upgrades",
+                    price: "$20 per part",
+                    priceNote: "+$20 for motherboard install",
+                    description: "Upgrade individual components like RAM, GPU, CPU, or storage devices.",
+                    imageUrl: "../images/services/pc-upgrades.jpg"
+                },
+                {
+                    title: "Troubleshooting & General Support",
+                    price: "Free 30 minute consultation",
+                    priceNote: "$20 per hour after",
+                    description: "General tech support for software issues, phone problems, or other technology questions.",
+                    imageUrl: "../images/services/tech-support.jpg"
+                }
+            ]
+        },
+        {
+            name: "Car Electronics",
+            services: [
+                {
+                    title: "Stereo Installation",
+                    price: "$100",
+                    description: "I will help you select a stereo system and install it in your vehicle.",
+                    imageUrl: "../images/services/car-stereo.jpg"
+                },
+                {
+                    title: "Backup Camera Installation",
+                    price: "$50 if purchased with Stereo Installation",
+                    priceNote: "$100 if purchased standalone (requires additional disassembly and assembly)",
+                    description: "Add a backup camera to your vehicle for improved safety and convenience.",
+                    imageUrl: "../images/services/backup-camera.jpg"
+                },
+                {
+                    title: "Dashcam Installation",
+                    price: "$30",
+                    description: "Mounting and wiring of dashboard cameras.",
+                    imageUrl: "../images/services/dashcam.jpg"
+                },
+                {
+                    title: "Speaker Upgrade",
+                    price: "$100",
+                    priceNote: "$60 for only front speaker replacement",
+                    description: "Replace factory speakers with high-quality aftermarket options.",
+                    imageUrl: "../images/services/car-speakers.jpg"
+                }
+            ]
+        },
+        {
+            name: "Home Technology",
+            services: [
+                {
+                    title: "Router Installation & Configuration",
+                    price: "$50",
+                    description: "Setup, optimization, and security configuration for home networks.",
+                    imageUrl: "../images/services/router-setup.jpg"
+                },
+                {
+                    title: "Smart Device Setup",
+                    price: "$30",
+                    description: "Installation and configuration of smart home devices like thermostats, speakers, and lighting.",
+                    imageUrl: "../images/services/smart-home.jpg"
+                },
+                {
+                    title: "Custom Services",
+                    price: "$20/hr",
+                    description: "General technology setup, installation, and troubleshooting for various home systems.",
+                    imageUrl: "../images/services/custom-tech.png"
+                }
+            ]
+        }
+    ];
+
+    // Function to create and display service categories
+    function displayServices() {
+        const container = document.getElementById("services-container");
+
+        serviceCategories.forEach(category => {
+            // Create category section
+            const categorySection = document.createElement("div");
+            categorySection.className = "service-category";
+
+            // Add category title
+            const categoryTitle = document.createElement("h2");
+            categoryTitle.textContent = category.name;
+            categorySection.appendChild(categoryTitle);
+
+            // Create services row
+            const servicesRow = document.createElement("div");
+            servicesRow.className = "services-row";
+
+            // Add individual services
+            category.services.forEach(service => {
+                const serviceCard = document.createElement("div");
+                serviceCard.className = "service-card";
+
+                // Add image if available
+                if (service.imageUrl) {
+                    const imageContainer = document.createElement("div");
+                    imageContainer.className = "image-container";
+
+                    const serviceImage = document.createElement("img");
+                    serviceImage.src = service.imageUrl;
+                    serviceImage.alt = service.title;
+                    serviceImage.onerror = function() {
+                        // Fallback image if the specified one doesn't load
+                        this.src = "../images/services/placeholder.jpg";
+                    };
+
+                    imageContainer.appendChild(serviceImage);
+                    serviceCard.appendChild(imageContainer);
+                }
+
+                const serviceTitle = document.createElement("h3");
+                serviceTitle.textContent = service.title;
+
+                const servicePrice = document.createElement("div");
+                servicePrice.className = "service-price";
+                servicePrice.textContent = service.price;
+
+                // Create price container to hold both price and price notes
+                const priceContainer = document.createElement("div");
+                priceContainer.className = "price-container";
+                priceContainer.appendChild(servicePrice);
+
+                // Handle multi-line price by splitting on \n and creating separate elements
+                if (service.price && service.price.includes('\n')) {
+                    const priceLines = service.price.split('\n');
+                    servicePrice.textContent = priceLines[0];
+
+                    // Create additional price lines
+                    for (let i = 1; i < priceLines.length; i++) {
+                        const additionalPrice = document.createElement("div");
+                        additionalPrice.className = "service-price-note";
+                        additionalPrice.textContent = priceLines[i];
+                        priceContainer.appendChild(additionalPrice);
+                    }
+                }
+
+                // Add price note if available
+                if (service.priceNote) {
+                    const servicePriceNote = document.createElement("div");
+                    servicePriceNote.className = "service-price-note";
+                    servicePriceNote.textContent = service.priceNote;
+                    priceContainer.appendChild(servicePriceNote);
+                }
+
+                const serviceDesc = document.createElement("p");
+                serviceDesc.textContent = service.description;
+
+                // Add elements in the correct order
+                serviceCard.appendChild(serviceTitle);
+                serviceCard.appendChild(priceContainer);
+                serviceCard.appendChild(serviceDesc);
+
+                servicesRow.appendChild(serviceCard);
+            });
+
+            categorySection.appendChild(servicesRow);
+            container.appendChild(categorySection);
+        });
+    }
+
+    // Execute when DOM is fully loaded
+    document.addEventListener("DOMContentLoaded", displayServices);
+</script>
+</body>
+</html>
