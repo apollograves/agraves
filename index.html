@@ -1,205 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Apollo Graves — Software &amp; Robotics</title>
+    <meta name="description" content="Apollo Graves builds software for competitive robotics, along with the web tools, games, and hardware projects that come out of it.">
+    <meta name="theme-color" content="#101418">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Apollo Graves — Software &amp; Robotics">
+    <meta property="og:description" content="FRC robotics code and CAD, small web tools, games, mods, and hardware projects.">
+    <meta property="og:url" content="https://agraves.dev/">
+    <meta property="og:image" content="https://agraves.dev/images/robot-poster.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%235097ca'/><text x='16' y='23' font-family='sans-serif' font-size='19' font-weight='600' text-anchor='middle' fill='%23101418'>A</text></svg>">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-    <meta charset="UTF-8">
-    <title>Apollo Graves</title>
-    <link rel="stylesheet" href="styles.css?v=9">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devicon@2.16.0/devicon.min.css">
+    <link rel="stylesheet" href="styles.css?v=11">
 </head>
 <body>
-<canvas id="bgCanvas" width="720" height="720" class="backgroundCanvas"></canvas>
-<script src="animated-background.js?v=1"></script>
-<div class="headerFlex">
-    <h1>Apollo's Projects</h1>
-    <div>
-        <a href="https://www.linkedin.com/in/apollograves/">
-            <img src="images/linkedin-logo.webp" alt="LinkedIn" width="50" height="50">
-        </a>
-        <a href="https://github.com/apollograves">
-            <img src="images/github-mark-white.svg" alt="GitHub" width="50" height="50">
-        </a>
-    </div>
-</div>
-<script>
-    const buttons = [
-        {
-            name: "FIRST Robotics Competition",
-            links: [
-                { text: "My FRC Documentation [WIP]", url: "https://frc.apollograves.com" },
-                { text: "1778 2025 Robot CAD & Code", url: "https://www.chiefdelphi.com/t/1778-2025-cad-code-release/501460" },
-                { text: "1778 2024 Robot CAD & Code", url: "https://www.chiefdelphi.com/t/1778-cad-code-release/466727"},
-            ]
-        },
-        {
-            name: "Games & Mods",
-            links: [
-                { text: "Game of Life", url: "game-of-life/game.html?v=1" },
-                { text: "Melvor Idle Store Search Mod", url: "https://mod.io/g/melvoridle/m/storesearch" },
-            ]
-        },
-        {
-            name: "Tools",
-            links: [
-                { text: "FRC Event Tool", url: "frc-event-tool/frc-event-tool.html?v=1" },
-                { text: "Graphing Calculator", url: "graphing-calculator/graphing-calculator.html?v=1" },
-            ]
-        },
-        {
-            name: "Miscellaneous",
-            links: [
-                { text: "My Tech Services", url: "https://tech.apollograves.com"},
-                { text: "Space Simulation [WIP]", url: "https://space.agraves.dev"},
-                { text: "Makerworld", url: "https://makerworld.com/en/@apollograves/profile"}
-            ]
-        },
-    ];
+<canvas id="bgCanvas" class="backgroundCanvas" aria-hidden="true"></canvas>
 
-    document.addEventListener("DOMContentLoaded", () => {
-        const container = document.getElementById("button-container");
-        buttons.forEach(({name, links}) => {
-            const subContainer = document.createElement("button-subcontainer");
-            subContainer.appendChild(document.createElement("h2")).textContent = name;
-            links.forEach(({ text, url }) => {
-                const button = document.createElement("button");
-                button.textContent = text;
-                button.className = "defaultButton";
-                button.onclick = () => (location.href = url);
-                subContainer.appendChild(button);
-            })
-            container.appendChild(subContainer);
-        })
-    });
-</script>
-<div id="button-container" class="projectButtons"></div>
+<a class="skipLink" href="#projects">Skip to projects</a>
 
-<div class="centeredFlex">
-    <h1>Experience</h1>
-</div>
-<div class="experience-grids">
-    <div>
-        <h2 class="category-header">Languages</h2>
-        <div class="grid-container">
-            <div>
-                <i class="devicon-cplusplus-plain"></i>
-                <br/> C++
-            </div>
-            <div>
-                <i class="devicon-kotlin-plain colored"></i>
-                <br/> Kotlin
-            </div>
-            <div>
-                <i class="devicon-java-plain colored"></i>
-                <br/> Java
-            </div>
-            <div>
-                <i class="devicon-python-plain colored"></i>
-                <br/> Python
-            </div>
-            <div>
-                <i class="devicon-javascript-plain colored"></i>
-                <br/> JavaScript
-            </div>
-            <div>
-                <i class="devicon-dart-plain colored"></i>
-                <br/> Dart
-            </div>
-            <div>
-                <i class="devicon-html5-plain colored"></i>
-                <br/> HTML
-            </div>
-            <div>
-                <i class="devicon-css3-plain colored"></i>
-                <br/> CSS
-            </div>
-            <div>
-                <i class="devicon-react-plain colored"></i>
-                <br/> React
-            </div>
-        </div>
-    </div>
-    <div>
-        <h2 class="category-header">Frameworks & Platforms</h2>
-        <div class="grid-container">
-            <div>
-                <i class="devicon-flutter-plain colored"></i>
-                <br/> Flutter
-            </div>
-            <div>
-                <i class="devicon-firebase-plain colored"></i>
-                <br/> Firebase
-            </div>
-            <div>
-                <i class="devicon-amazonwebservices-plain-wordmark colored"></i>
-                <br/> AWS
-            </div>
-            <div>
-                <i class="devicon-nodejs-plain colored"></i>
-                <br/> Node.js
-            </div>
-            <div>
-                <i class="devicon-cloudflare-plain colored"></i>
-                <br/> Cloudflare
-            </div>
-        </div>
-    </div>
-    <div>
-        <h2 class="category-header">Tools & Software</h2>
-        <div class="grid-container">
-            <div>
-                <i class="devicon-git-plain colored"></i>
-                <br/> Git
-            </div>
-            <div>
-                <i class="devicon-visualstudio-plain colored"></i>
-                <br/> Visual Studio
-            </div>
-            <div>
-                <i class="devicon-jetbrains-plain colored"></i>
-                <br/> JetBrains
-            </div>
-            <div>
-                <i class="devicon-gradle-plain"></i>
-                <br/> Gradle
-            </div>
-            <div>
-                <i class="devicon-vim-plain colored"></i>
-                <br/> Vim
-            </div>
-        </div>
-    </div>
-    <div>
-        <h2 class="category-header">Others</h2>
-        <div class="grid-container">
-            <div>
-                <img src="images/onshape-logo.webp" height="83"/>
-                <br/> Onshape
-            </div>
-            <div>
-                <i class="devicon-blender-original colored"></i>
-                <br/> Blender
-            </div>
-            <div>
-                <i class="devicon-linux-plain colored"></i>
-                <br/> Linux
-            </div>
-            <div>
-                <i class="devicon-archlinux-plain colored"></i>
-                <br/> Arch Linux
-            </div>
-            <div>
-                <i class="devicon-raspberrypi-plain colored"></i>
-                <br/> Raspberry Pi
-            </div>
-            <div>
-                <i class="devicon-arduino-plain colored"></i>
-                <br/> Arduino
-            </div>
-        </div>
-    </div>
+<header class="siteHeader">
+    <div class="siteHeader__inner">
+        <a class="wordmark" href="#top">Apollo Graves<span class="wordmark__dot">.</span></a>
 
-</div>
+        <nav class="siteNav" aria-label="Primary">
+            <a href="#projects">Projects</a>
+            <a href="#experience">Experience</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+        <div class="socialRow">
+            <a class="socialLink" href="https://github.com/apollograves" target="_blank" rel="noopener" aria-label="GitHub">
+                <img src="images/github-mark-white.svg" alt="" width="22" height="22">
+            </a>
+            <a class="socialLink" href="https://www.linkedin.com/in/apollograves/" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <img src="images/linkedin-logo.webp" alt="" width="22" height="22">
+            </a>
+        </div>
+    </div>
+</header>
+
+<main id="top">
+
+    <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+    <section class="hero">
+        <h1 class="hero__title">Apollo Graves</h1>
+        <p class="hero__lede">
+            I like building robots and other cool stuff.
+        </p>
+        <div class="hero__actions">
+            <a class="btn btn--primary" href="#projects">See my projects</a>
+            <a class="btn btn--ghost" href="https://github.com/apollograves" target="_blank" rel="noopener">GitHub</a>
+        </div>
+    </section>
+
+    <!-- ── Projects ─────────────────────────────────────────────────────── -->
+    <section id="projects" class="section">
+        <div class="sectionHead">
+            <h2>Projects</h2>
+        </div>
+
+        <div class="projectList">
+
+            <!--
+              To add a project: copy one <article> block.
+              For a video panel use .project__media with a <video>; for a
+              placeholder use .project__media.mediaPattern (no video needed).
+              Links are all .btn--ghost on purpose — nothing in a list
+              should read as more "official" than the others.
+            -->
+
+            <article class="project">
+                <div class="project__media">
+                    <video class="project__video" muted loop playsinline preload="none"
+                           poster="images/robot-poster.jpg">
+                        <source src="images/robot.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="project__body">
+                    <h3 class="project__title">Robotics</h3>
+                    <ul class="linkList">
+                        <li><a class="btn btn--ghost" href="https://www.chiefdelphi.com/t/1778-2025-cad-code-release/501460" target="_blank" rel="noopener">2025 Robot CAD &amp; Code</a></li>
+                        <li><a class="btn btn--ghost" href="https://www.chiefdelphi.com/t/1778-cad-code-release/466727" target="_blank" rel="noopener">2024 Robot CAD &amp; Code</a></li>
+                        <li><a class="btn btn--ghost" href="https://frc.apollograves.com" target="_blank" rel="noopener">FRC Documentation <span class="tag">WIP</span></a></li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="project">
+                <div class="project__media">
+                    <video class="project__video" muted loop playsinline preload="none"
+                           poster="images/games-poster.jpg">
+                        <source src="images/games.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="project__body">
+                    <h3 class="project__title">Miscellaneous</h3>
+                    <ul class="linkList">
+                        <li><a class="btn btn--ghost" href="game-of-life/game.html?v=2">Game of Life</a></li>
+                        <li><a class="btn btn--ghost" href="https://mod.io/g/melvoridle/m/storesearch" target="_blank" rel="noopener">Melvor Idle Store Search</a></li>
+                        <li><a class="btn btn--ghost" href="graphing-calculator/graphing-calculator.html?v=2">Graphing Calculator</a></li>
+                        <li><a class="btn btn--ghost" href="https://space.agraves.dev" target="_blank" rel="noopener">Space Simulation <span class="tag">WIP</span></a></li>
+                        <li><a class="btn btn--ghost" href="https://makerworld.com/en/@apollograves/profile" target="_blank" rel="noopener">MakerWorld</a></li>
+                    </ul>
+                </div>
+            </article>
+
+        </div>
+
+        <div class="archive">
+            <p class="archive__label">Archive</p>
+            <ul class="archive__list">
+                <li><a href="frc-event-tool/frc-event-tool.html?v=2">FRC Event Tool</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ── Experience ───────────────────────────────────────────────────── -->
+    <section id="experience" class="section">
+        <div class="sectionHead">
+            <h2>Experience</h2>
+        </div>
+
+        <div class="skillGroups">
+            <div class="skillGroup">
+                <h3 class="skillGroup__title">Languages</h3>
+                <ul class="skillGrid">
+                    <li><i class="devicon-cplusplus-plain colored" aria-hidden="true"></i><span>C++</span></li>
+                    <li><i class="devicon-kotlin-plain colored" aria-hidden="true"></i><span>Kotlin</span></li>
+                    <li><i class="devicon-java-plain colored" aria-hidden="true"></i><span>Java</span></li>
+                    <li><i class="devicon-python-plain colored" aria-hidden="true"></i><span>Python</span></li>
+                    <li><i class="devicon-javascript-plain colored" aria-hidden="true"></i><span>JavaScript</span></li>
+                </ul>
+            </div>
+
+            <div class="skillGroup">
+                <h3 class="skillGroup__title">Engineering &amp; Systems</h3>
+                <ul class="skillGrid">
+                    <li><img src="images/onshape-logo.webp" alt="" width="50" height="50"><span>Onshape</span></li>
+                    <li><i class="devicon-blender-original colored" aria-hidden="true"></i><span>Blender</span></li>
+                    <!-- no "colored" on Tux: his brand fill is black and vanishes on a dark card -->
+                    <li><i class="devicon-linux-plain" aria-hidden="true"></i><span>Linux</span></li>
+                    <li><i class="devicon-archlinux-plain colored" aria-hidden="true"></i><span>Arch Linux</span></li>
+                    <li><i class="devicon-raspberrypi-plain colored" aria-hidden="true"></i><span>Raspberry Pi</span></li>
+                    <li><i class="devicon-arduino-plain colored" aria-hidden="true"></i><span>Arduino</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- ── Footer ───────────────────────────────────────────────────────────── -->
+<footer id="contact" class="siteFooter">
+    <div class="siteFooter__inner">
+        <h2 class="siteFooter__title">Get in touch</h2>
+        <div class="siteFooter__links">
+            <a class="btn btn--primary" href="https://www.linkedin.com/in/apollograves/" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="btn btn--ghost" href="https://github.com/apollograves" target="_blank" rel="noopener">GitHub</a>
+        </div>
+    </div>
+    <p class="siteFooter__meta">© <span id="year">2026</span> Apollo Graves · agraves.dev</p>
+</footer>
+
+<script src="animated-background.js?v=2"></script>
+<script src="site.js?v=1"></script>
 </body>
 </html>

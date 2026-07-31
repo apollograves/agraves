@@ -27,7 +27,6 @@ function evaluate(x) {
     equation = equation.replaceAll(/\^/g, '**');
     equation = equation.replaceAll(/\blog\b/g, "Math.log10");
     equation = equation.replaceAll(/\bln\b/g, "Math.log");
-    console.log("Processed Equation:", equation);
 
     try {
         let result = Function("x", `return ${equation}`)(x);

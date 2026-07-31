@@ -110,8 +110,6 @@ const fetchEventTeams = async (eventKey) => {
             throw new Error(`Error: ${response.status}`);
         }
         data = await response.json();
-
-        console.log(data)
         return data;
     } catch (error) {
         console.error("Failed to fetch team data:", error);
@@ -130,8 +128,6 @@ const fetchEventStatuses = async (eventKey) => {
             throw new Error(`Error: ${response.status}`);
         }
         data = await response.json();
-
-        console.log(data)
         return data;
     } catch (error) {
         console.error("Failed to fetch team data:", error);
@@ -150,8 +146,6 @@ const fetchTeamMatches = async (teamNumber, eventKey) => {
             throw new Error(`Error: ${response.status}`);
         }
         data = await response.json();
-
-        console.log(data)
         return data;
     } catch (error) {
         console.error("Failed to fetch team data:", error);

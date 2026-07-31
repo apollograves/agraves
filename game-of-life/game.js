@@ -66,10 +66,10 @@ function drawGrid() {
         }
     }
     for (let x = 0; x < width / size; x++) {
-        if(x !== 0) draw(x * size, 0, getComputedStyle(document.documentElement).getPropertyValue('--thirdColor'), 1, height);
+        if(x !== 0) draw(x * size, 0, getComputedStyle(document.documentElement).getPropertyValue('--fourthColor'), 1, height);
     }
     for (let y = 0; y < height / size; y++) {
-        if(y !== 0) draw(0, y * size, getComputedStyle(document.documentElement).getPropertyValue('--thirdColor'), width, 1);
+        if(y !== 0) draw(0, y * size, getComputedStyle(document.documentElement).getPropertyValue('--fourthColor'), width, 1);
     }
 }
 

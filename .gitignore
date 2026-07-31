@@ -1,0 +1,10 @@
+# Raw capture footage — far too large to push (GitHub rejects any file
+# over 100 MB). Keep these locally as the masters; what actually ships
+# is the compressed images/robot.mp4 + images/games.mp4 and their
+# poster frames, which index.html references.
+images/robot-section-video.mp4
+images/robot-section-gif.gif
+images/website-game-gif.gif
+
+# JetBrains project metadata — per-editor, not site content.
+.idea/

@@ -1,157 +1,205 @@
-let canvas = document.getElementById("bgCanvas");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-let firstColor = getComputedStyle(document.documentElement).getPropertyValue('--firstColor');
-let secondColor = getComputedStyle(document.documentElement).getPropertyValue('--secondColor');
-let thirdColor = getComputedStyle(document.documentElement).getPropertyValue('--thirdColor');
-let ctx = canvas.getContext('2d');
+/* Drifting boids background.
+   Same flocking rules as before, but the three neighbour passes are
+   folded into one symmetric i<j sweep and the dot count is capped, so
+   the cost stays flat instead of growing with screen area. */
 
-let dotRadius = 2 // px
-let numberOfDots = 25
-let collisionAvoidanceDistance = 15
-let avoidFactor = .05
-let centeringFactor = .000005
-let viewDistance = 30
-let edgeMargin = 30
-let edgeAvoidanceFactor = .2
-let alignmentFactor = .05
-let minimumSpeed = .5
-let maximumSpeed = 2
-let cursorViewDistance = 50
+(() => {
+    "use strict";
 
-let mousePos = { x: null, y: null };
+    const canvas = document.getElementById("bgCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
 
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    let newNumberOfDots = Math.floor(canvas.width * canvas.height / 5000);
+    const accent = getComputedStyle(document.documentElement)
+        .getPropertyValue("--thirdColor").trim() || "#5fa9e0";
 
-    if (newNumberOfDots > numberOfDots) {
-        points = createRandomPoints(newNumberOfDots, points);
-    } else {
-        points = points.slice(0, newNumberOfDots);
-    }
+    // --- Tuning ---------------------------------------------------------
+    const DOT_RADIUS = 2;
+    const DOT_ALPHA = 0.5;
+    const DOTS_PER_PIXEL = 1 / 7000;
+    const MAX_DOTS = 200;
 
-    numberOfDots = newNumberOfDots;
-}
+    const SEPARATION_DIST = 18;
+    const VIEW_DIST = 45;
+    const CURSOR_DIST = 60;
+    const EDGE_MARGIN = 30;
 
-class Point {
-    constructor(x, y, dx, dy, alpha, positiveAlpha) {
-        this.x = x;
-        this.y = y;
-        this.dx = dx;
-        this.dy = dy;
-    }
-}
+    const AVOID_FACTOR = 0.05;
+    const ALIGN_FACTOR = 0.05;
+    const CENTER_FACTOR = 0.000005;
+    const EDGE_FACTOR = 0.2;
 
-let points = createRandomPoints(numberOfDots);
+    const MIN_SPEED = 0.5;
+    const MAX_SPEED = 2;
 
-function createRandomPoints(number, previousPoints = []) {
+    const SEPARATION_SQ = SEPARATION_DIST * SEPARATION_DIST;
+    const VIEW_SQ = VIEW_DIST * VIEW_DIST;
+    const CURSOR_SQ = CURSOR_DIST * CURSOR_DIST;
+
+    // --- State ----------------------------------------------------------
+    let width = 0;
+    let height = 0;
     let points = [];
-    for (let i = 0; i < number; i++) {
-        if (previousPoints[i] === undefined)
-            points[i] = new Point(
-                Math.random() * canvas.width,
-                Math.random() * canvas.height,
-                ((Math.random() * 2) - 1) * minimumSpeed,
-                ((Math.random() * 2) - 1) * minimumSpeed,
-                Math.random() * 2 - 1,
-                Math.round(Math.random())
-            );
-        else points[i] = previousPoints[i];
+    let frameId = null;
+    const mouse = { x: null, y: null };
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function makePoint() {
+        return {
+            x: Math.random() * width,
+            y: Math.random() * height,
+            dx: (Math.random() * 2 - 1) * MIN_SPEED,
+            dy: (Math.random() * 2 - 1) * MIN_SPEED,
+        };
     }
-    return points;
-}
 
-function pointDistance(point1, point2) {
-    return Math.hypot(point1.x - point2.x, point1.y - point2.y);
-}
+    function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = window.innerWidth;
+        height = window.innerHeight;
 
-function getMousePos(event) {
-    const rect = canvas.getBoundingClientRect();
-    mousePos.x = event.clientX - rect.left;
-    mousePos.y = event.clientY - rect.top;
-}
-window.addEventListener('mousemove', getMousePos);
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-function plotPoints(timestamp) {
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = firstColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = thirdColor;
-
-    for (let point of points) {
-        let closeDx = 0, closeDy = 0;
-        for (let evalPoint of points) {
-            if (point !== evalPoint && pointDistance(point, evalPoint) < collisionAvoidanceDistance) {
-                closeDx += point.x - evalPoint.x;
-                closeDy += point.y - evalPoint.y;
-            }
-        }
-        point.dx += closeDx * avoidFactor;
-        point.dy += closeDy * avoidFactor;
-
-        if (mousePos.x !== null && mousePos.y !== null && pointDistance(point, mousePos) < cursorViewDistance) {
-            point.dx += (point.x - mousePos.x) * avoidFactor;
-            point.dy += (point.y - mousePos.y) * avoidFactor;
-        }
-
-        let dxAverage = 0, dyAverage = 0, numNearbyDots = 0;
-        for (let evalPoint of points) {
-            if (point !== evalPoint && pointDistance(point, evalPoint) < viewDistance) {
-                dxAverage += evalPoint.dx;
-                dyAverage += evalPoint.dy;
-                numNearbyDots++;
-            }
-        }
-        if (numNearbyDots > 0) {
-            dxAverage /= numNearbyDots;
-            dyAverage /= numNearbyDots;
-            point.dx += (dxAverage - point.dx) * alignmentFactor;
-            point.dy += (dyAverage - point.dy) * alignmentFactor;
-        }
-
-        let xAverage = 0, yAverage = 0;
-        numNearbyDots = 0;
-        for (let evalPoint of points) {
-            if (point !== evalPoint && pointDistance(point, evalPoint) < viewDistance) {
-                xAverage += evalPoint.x;
-                yAverage += evalPoint.y;
-                numNearbyDots++;
-            }
-        }
-        if (numNearbyDots > 0) {
-            xAverage /= numNearbyDots;
-            yAverage /= numNearbyDots;
-            point.dx += (xAverage - point.x) * centeringFactor;
-            point.dy += (yAverage - point.y) * centeringFactor;
-        }
-
-        if (point.x < edgeMargin) point.dx += edgeAvoidanceFactor;
-        if (point.y < edgeMargin) point.dy += edgeAvoidanceFactor;
-        if (point.x > (canvas.width - edgeMargin)) point.dx -= edgeAvoidanceFactor;
-        if (point.y > (canvas.height - edgeMargin)) point.dy -= edgeAvoidanceFactor;
-
-        let speed = Math.hypot(point.dx, point.dy);
-        if (speed > maximumSpeed) {
-            point.dx = (point.dx / speed) * maximumSpeed;
-            point.dy = (point.dy / speed) * maximumSpeed;
-        }
-        if (speed < minimumSpeed) {
-            point.dx = (point.dx / speed) * minimumSpeed;
-            point.dy = (point.dy / speed) * minimumSpeed;
-        }
-
-        point.x += point.dx;
-        point.y += point.dy;
-
-        ctx.beginPath();
-        ctx.arc(point.x, point.y, dotRadius, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.fill();
+        const target = Math.min(MAX_DOTS, Math.round(width * height * DOTS_PER_PIXEL));
+        while (points.length < target) points.push(makePoint());
+        points.length = target;
     }
-    requestAnimationFrame(plotPoints);
-}
-addEventListener("resize", resize);
-resize();
-requestAnimationFrame(plotPoints);
+
+    function step() {
+        const n = points.length;
+        const sepX = new Float32Array(n);
+        const sepY = new Float32Array(n);
+        const aliX = new Float32Array(n);
+        const aliY = new Float32Array(n);
+        const cohX = new Float32Array(n);
+        const cohY = new Float32Array(n);
+        const neighbours = new Int32Array(n);
+
+        // One sweep over each unique pair feeds separation, alignment and
+        // cohesion at once — the old code walked every pair three times.
+        for (let i = 0; i < n; i++) {
+            const a = points[i];
+            for (let j = i + 1; j < n; j++) {
+                const b = points[j];
+                const dx = a.x - b.x;
+                const dy = a.y - b.y;
+                const distSq = dx * dx + dy * dy;
+                if (distSq >= VIEW_SQ) continue;
+
+                aliX[i] += b.dx; aliY[i] += b.dy;
+                aliX[j] += a.dx; aliY[j] += a.dy;
+                cohX[i] += b.x;  cohY[i] += b.y;
+                cohX[j] += a.x;  cohY[j] += a.y;
+                neighbours[i]++; neighbours[j]++;
+
+                if (distSq < SEPARATION_SQ) {
+                    sepX[i] += dx; sepY[i] += dy;
+                    sepX[j] -= dx; sepY[j] -= dy;
+                }
+            }
+        }
+
+        for (let i = 0; i < n; i++) {
+            const p = points[i];
+
+            p.dx += sepX[i] * AVOID_FACTOR;
+            p.dy += sepY[i] * AVOID_FACTOR;
+
+            if (neighbours[i] > 0) {
+                const count = neighbours[i];
+                p.dx += (aliX[i] / count - p.dx) * ALIGN_FACTOR;
+                p.dy += (aliY[i] / count - p.dy) * ALIGN_FACTOR;
+                p.dx += (cohX[i] / count - p.x) * CENTER_FACTOR;
+                p.dy += (cohY[i] / count - p.y) * CENTER_FACTOR;
+            }
+
+            if (mouse.x !== null) {
+                const dx = p.x - mouse.x;
+                const dy = p.y - mouse.y;
+                if (dx * dx + dy * dy < CURSOR_SQ) {
+                    p.dx += dx * AVOID_FACTOR;
+                    p.dy += dy * AVOID_FACTOR;
+                }
+            }
+
+            if (p.x < EDGE_MARGIN) p.dx += EDGE_FACTOR;
+            if (p.y < EDGE_MARGIN) p.dy += EDGE_FACTOR;
+            if (p.x > width - EDGE_MARGIN) p.dx -= EDGE_FACTOR;
+            if (p.y > height - EDGE_MARGIN) p.dy -= EDGE_FACTOR;
+
+            let speed = Math.hypot(p.dx, p.dy);
+            if (speed === 0) {
+                // Nudge a stalled dot rather than dividing by zero.
+                p.dx = MIN_SPEED;
+                speed = MIN_SPEED;
+            }
+            if (speed > MAX_SPEED) {
+                p.dx = (p.dx / speed) * MAX_SPEED;
+                p.dy = (p.dy / speed) * MAX_SPEED;
+            } else if (speed < MIN_SPEED) {
+                p.dx = (p.dx / speed) * MIN_SPEED;
+                p.dy = (p.dy / speed) * MIN_SPEED;
+            }
+
+            p.x += p.dx;
+            p.y += p.dy;
+        }
+    }
+
+    function render() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.globalAlpha = DOT_ALPHA;
+        ctx.fillStyle = accent;
+        for (const p of points) {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, DOT_RADIUS, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+    }
+
+    function loop() {
+        step();
+        render();
+        frameId = requestAnimationFrame(loop);
+    }
+
+    function start() {
+        if (frameId === null) frameId = requestAnimationFrame(loop);
+    }
+
+    function stop() {
+        if (frameId !== null) {
+            cancelAnimationFrame(frameId);
+            frameId = null;
+        }
+    }
+
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            resize();
+            if (reduceMotion) render();
+        }, 150);
+    });
+
+    window.addEventListener("mousemove", (event) => {
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
+    }, { passive: true });
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stop();
+        else if (!reduceMotion) start();
+    });
+
+    resize();
+    if (reduceMotion) render();
+    else start();
+})();

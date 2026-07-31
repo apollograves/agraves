@@ -1,201 +1,648 @@
-:root{
-    --firstColor: #424242;
-    --secondColor: #eaeaea;
-    --thirdColor: #5097ca;
-    --fourthColor: rgba(80, 151, 202, 0.7);
+/* ===================================================================
+   agraves.dev — shared stylesheet
+   Used by index.html and every subpage (game-of-life, graphing-
+   calculator, frc-event-tool), so the "Subpage primitives" section
+   near the bottom must keep its class names stable.
+   =================================================================== */
+
+:root {
+    /* --- Palette -------------------------------------------------
+       These five legacy names are read directly out of the DOM by the
+       canvas scripts (animated-background.js, game.js,
+       graphing-calculator.js), so they must stay literal values. */
+    --firstColor:  #101418;   /* page background   */
+    --secondColor: #e9eef4;   /* foreground / text */
+    --thirdColor:  #5fa9e0;   /* accent            */
+    --fourthColor: rgba(95, 169, 224, 0.30);
+    --fifthColor:  #171d24;   /* raised surface    */
+
+    /* --- Semantic aliases used by this stylesheet --------------- */
+    --bg:            var(--firstColor);
+    --text:          var(--secondColor);
+    --accent:        var(--thirdColor);
+    --accent-soft:   var(--fourthColor);
+    --surface:       var(--fifthColor);
+
+    --surface-hi:    #1e252e;
+    --line:          #2a323d;
+    --line-hi:       #3a4553;
+    --muted:         #97a3b2;
+    --accent-hi:     #86c2f0;
+    --on-accent:     #0c1116;
+
+    --radius:        16px;
+    --radius-sm:     10px;
+    --maxw:          1120px;
+    --gutter:        clamp(20px, 5vw, 48px);
+    --header-h:      64px;
+
+    --shadow:        0 10px 30px rgba(0, 0, 0, 0.35);
+    --ease:          cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-body{
-    background: var(--firstColor);
-    color: var(--secondColor);
-    font-family: Rubik, serif;
+/* ===================================================================
+   Base
+   =================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + 20px);
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    /* clip, not hidden — hidden here would break the sticky header */
+    overflow-x: clip;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Rubik, system-ui, -apple-system, "Segoe UI", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
-    font-style: normal;
-}
-h1{
-    font-size: xx-large;
-    font-weight: 425;
-}
-h2{
-    font-size: x-large;
-    font-weight: normal;
-    text-align: center;
-    margin-bottom: 5px;
-    margin-top: 5px;
+    line-height: 1.6;
 }
 
-h3.category-header {
-    font-size: large;
-    font-weight: normal;
-    text-align: center;
-    margin-bottom: 5px;
-    margin-top: 20px;
-    color: var(--secondColor);
-}
-.social-links{
-    display: flex;
-    flex-direction: row;
-    gap: 15px;
-    justify-content: center;
-    margin: 10px;
-    width: 90%;
+h1, h2, h3 { line-height: 1.2; margin: 0; font-weight: 500; }
+p { margin: 0; }
+img, svg, video { display: block; max-width: 100%; }
+ul { list-style: none; margin: 0; padding: 0; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hi); }
+
+:focus-visible {
+    outline: 2px solid var(--accent-hi);
+    outline-offset: 3px;
+    border-radius: 4px;
 }
 
-div button-subcontainer{
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    padding: 15px;
-}
-
-button{
-    font-family: inherit;
-    font-optical-sizing: inherit;
-    font-size: large;
-    font-weight: inherit;
-    color: var(--secondColor);
-    background-color: var(--thirdColor);
-    border: none;
-    padding: 5px;
-    text-align: center;
-    text-decoration: none;
-    margin: 4px 2px;
-    border-radius: 5px;
-    @media (pointer: none), (pointer: coarse) {
-        font-size: 50px;
-        border-radius: 10px;
-    }
-    transition: 0.3s;
-    cursor: pointer;
-}
-
-button:hover {background-color: var(--fourthColor);}
-
-.projectButtons{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-.centeredFlex{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-}
-
-.grid-container {
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    max-width: 100%;
-    width: 100%;
-    background: var(--firstColor);
-    mask-image:
-            linear-gradient(to top, transparent, black 25px),
-            linear-gradient(to bottom, transparent, black 25px),
-            linear-gradient(to left, transparent, black 25px),
-            linear-gradient(to right, transparent, black 25px);
-    mask-composite: intersect;
-    padding: 15px;
-    line-height: 30px;
-}
-.grid-container div{
-    padding: 5px 5px 5px;
-    text-align: center;
-    border-radius: 10px;
-    min-width: 60px;
-}
-
-.grid-container i{
-    font-size: 50px;
-}
-.grid-container img{
-    width: 50px;
-    height: 50px;
-}
-
-canvas{
-    margin: 0;
-    padding: 0;
-    border: 3px solid var(--thirdColor);
-}
-
-.headerFlex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    position: relative;
-}
-.headerFlex h1 {
-    margin: 0;
+.skipLink {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+    padding: 10px 16px;
+    background: var(--accent);
+    color: var(--on-accent);
+    border-radius: 0 0 var(--radius-sm) 0;
 }
-.headerFlex div{
-    display: flex;
-    flex-direction: row;
-    gap: 15px;
-}
-.backgroundCanvas{
+.skipLink:focus { left: 0; }
+
+.backgroundCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
     margin: 0;
     padding: 0;
-    position: fixed;
-    z-index: -1;
-    top: 0;
-    left: 0;
     border: 0;
 }
-.eventTable{
+
+/* ===================================================================
+   Shared bits
+   =================================================================== */
+
+.tag {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-size: 0.66em;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid currentColor;
+    opacity: 0.75;
+    vertical-align: 1.5px;
+}
+
+/* Buttons — also applied to bare <button> for the subpages. */
+.btn,
+button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.35;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.22s var(--ease),
+                border-color 0.22s var(--ease),
+                color 0.22s var(--ease),
+                transform 0.22s var(--ease);
+}
+
+.btn--primary,
+button {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+}
+.btn--primary:hover,
+button:hover {
+    background: var(--accent-hi);
+    border-color: var(--accent-hi);
+    color: var(--on-accent);
+    transform: translateY(-1px);
+}
+
+.btn--ghost {
+    background: transparent;
+    border-color: var(--line-hi);
+    color: var(--text);
+}
+.btn--ghost:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--text);
+    transform: translateY(-1px);
+}
+
+/* ===================================================================
+   Header
+   =================================================================== */
+
+.siteHeader {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--header-h);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+}
+
+.siteHeader__inner {
+    max-width: var(--maxw);
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.wordmark {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+}
+.wordmark:hover { color: var(--text); }
+.wordmark__dot { color: var(--accent); }
+
+.siteNav {
+    display: flex;
+    gap: clamp(14px, 3vw, 32px);
+    font-size: 0.95rem;
+}
+.siteNav a {
+    color: var(--muted);
+    padding: 4px 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.22s var(--ease), border-color 0.22s var(--ease);
+}
+.siteNav a:hover {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+}
+
+.socialRow { display: flex; gap: 10px; }
+
+.socialLink {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.22s var(--ease), background-color 0.22s var(--ease);
+}
+.socialLink:hover { border-color: var(--accent); background: var(--accent-soft); }
+.socialLink img { width: 20px; height: 20px; opacity: 0.85; }
+
+/* ===================================================================
+   Hero
+   =================================================================== */
+
+.hero {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: clamp(72px, 16vh, 150px) var(--gutter) clamp(56px, 10vh, 96px);
+    text-align: center;
+}
+
+.hero__title {
+    font-size: clamp(2.6rem, 9vw, 5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.hero__lede {
+    max-width: 56ch;
+    margin: 20px auto 0;
+    font-size: clamp(1rem, 2.2vw, 1.18rem);
+    color: var(--muted);
+}
+
+.hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+/* ===================================================================
+   Sections
+   =================================================================== */
+
+.section {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: clamp(40px, 6vh, 64px) var(--gutter);
+}
+
+.sectionHead { margin-bottom: clamp(28px, 5vh, 44px); }
+.sectionHead h2 {
+    font-size: clamp(1.8rem, 4.5vw, 2.5rem);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+}
+
+/* ===================================================================
+   Projects
+   =================================================================== */
+
+.projectList {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3.5vh, 34px);
+}
+
+.project {
+    display: flex;
+    align-items: stretch;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.3s var(--ease), transform 0.3s var(--ease),
+                box-shadow 0.3s var(--ease);
+}
+.project:hover {
+    border-color: var(--line-hi);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+
+/* Zig-zag: even cards put the media on the right. */
+.project:nth-child(even) { flex-direction: row-reverse; }
+
+.project__media {
+    position: relative;
+    flex: 1 1 55%;
+    min-width: 0;
+    aspect-ratio: 16 / 9;
+    background: var(--bg);
+    overflow: hidden;
+}
+
+.project__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.project__body {
+    flex: 1 1 45%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(22px, 3vw, 34px);
+}
+
+.project__title {
+    font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+    font-weight: 600;
+}
+
+.linkList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+/* --- Placeholder media panels (no video yet) ---------------------- */
+.mediaPattern {
+    display: grid;
+    place-items: center;
+    color: var(--accent);
+    background:
+        radial-gradient(120% 90% at 30% 15%, var(--accent-soft), transparent 62%),
+        repeating-linear-gradient(45deg,
+            rgba(255, 255, 255, 0.022) 0 2px,
+            transparent 2px 12px),
+        var(--surface-hi);
+}
+.mediaPattern svg {
+    width: 34%;
+    max-width: 150px;
+    height: auto;
+    opacity: 0.5;
+    transition: opacity 0.35s var(--ease), transform 0.45s var(--ease);
+}
+.project:hover .mediaPattern svg { opacity: 0.75; transform: scale(1.04); }
+
+/* --- Archive: retired/minor items, deliberately low-key ----------- */
+.archive {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 16px;
+    margin-top: clamp(24px, 4vh, 36px);
+    padding-top: clamp(20px, 3vh, 28px);
+    border-top: 1px dashed var(--line);
+}
+.archive__label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+.archive__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+}
+.archive__list a {
+    color: var(--muted);
+    font-size: 0.9rem;
+    border-bottom: 1px solid transparent;
+}
+.archive__list a:hover {
+    color: var(--text);
+    border-bottom-color: var(--line-hi);
+}
+
+/* ===================================================================
+   Experience
+   =================================================================== */
+
+.skillGroups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(18px, 3vw, 30px);
+}
+
+.skillGroup {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: clamp(20px, 3vw, 28px);
+}
+
+.skillGroup__title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    margin-bottom: 18px;
+}
+
+.skillGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    gap: 10px;
+}
+
+.skillGrid li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 8px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.025);
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--muted);
+    transition: border-color 0.22s var(--ease), background-color 0.22s var(--ease),
+                color 0.22s var(--ease), transform 0.22s var(--ease);
+}
+.skillGrid li:hover {
+    border-color: var(--line-hi);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    transform: translateY(-2px);
+}
+
+.skillGrid i { font-size: 34px; line-height: 1; }
+.skillGrid img { width: 34px; height: 34px; object-fit: contain; }
+
+/* ===================================================================
+   Footer
+   =================================================================== */
+
+.siteFooter {
+    border-top: 1px solid var(--line);
+    margin-top: clamp(30px, 6vh, 60px);
+    padding: clamp(40px, 7vh, 68px) 0 28px;
+    background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+
+/* Gutter lives on the inner blocks, not the <footer>, so footer text
+   lines up with the section content above it. */
+.siteFooter__inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.siteFooter__title { font-size: clamp(1.4rem, 3.5vw, 1.9rem); font-weight: 600; }
+.siteFooter__links { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.siteFooter__meta {
+    max-width: var(--maxw);
+    margin: 36px auto 0;
+    padding: 20px var(--gutter) 0;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+/* ===================================================================
+   Responsive
+   =================================================================== */
+
+@media (max-width: 860px) {
+    .project,
+    .project:nth-child(even) { flex-direction: column; }
+    .project__media { flex: none; width: 100%; }
+    .project:hover { transform: none; }
+}
+
+@media (max-width: 560px) {
+    :root { --header-h: 58px; }
+    .siteNav { gap: 16px; font-size: 0.88rem; }
+    .wordmark { font-size: 0.95rem; }
+    .socialRow { display: none; }
+    .linkList .btn { flex: 1 1 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+/* ===================================================================
+   Subpage primitives
+   game-of-life · graphing-calculator · frc-event-tool
+   Class names here are referenced by those pages — keep them.
+   =================================================================== */
+
+/* Subpage toolbar: [ Home ] [ centred title ] [ spacer ].
+   The 1fr / auto / 1fr grid keeps the title optically centred no matter
+   how wide the Home button is. */
+.headerFlex {
+    /* full-bleed so the rule underneath reaches both edges */
+    padding: 14px var(--gutter);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid var(--line);
+}
+.headerFlex h1 {
+    font-size: clamp(1.3rem, 4vw, 2rem);
+    font-weight: 600;
+    text-align: center;
+}
+.headerFlex > :first-child { justify-self: start; }
+
+@media (max-width: 560px) {
+    .headerFlex { grid-template-columns: auto 1fr; }
+    .headerFlex h1 { text-align: right; }
+    .headerFlex > :last-child { display: none; }
+}
+
+.centeredFlex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 0 var(--gutter);
+}
+
+.horizontalFlex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 0 var(--gutter);
+}
+
+label { color: var(--muted); font-size: 0.92rem; }
+
+input {
+    margin: 0;
+    padding: 7px 10px;
+    background: var(--surface-hi);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.92rem;
+}
+input[type="range"] { padding: 0; accent-color: var(--accent); }
+
+/* Canvases owned by the subpages (the site background canvas is
+   excluded — it uses .backgroundCanvas).
+   Deliberately no max-width: these canvases size their own backing
+   store in JS, and letting CSS scale them would skew the grid and
+   throw off click-to-pixel mapping. Instead the row they sit in drops
+   its side padding so a 90vw canvas always fits. */
+.canvas {
+    border: 1px solid var(--line-hi);
+    border-radius: var(--radius);
+    background: var(--bg);
+}
+.centeredFlex:has(> .canvas) { padding-inline: 0; }
+
+/* Wraps the FRC tables so their fixed column widths scroll sideways on
+   a phone instead of stretching the whole page. */
+.tableWrap {
+    max-width: var(--maxw);
+    margin: 0 auto 20px;
+    padding: 0 var(--gutter);
+    overflow-x: auto;
+}
+
+.eventTable {
+    width: 100%;
+    min-width: 660px;
     table-layout: fixed;
     border-collapse: collapse;
-    border: 2px solid var(--thirdColor);
+    border: 1px solid var(--line-hi);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    font-size: 0.9rem;
 }
-.eventTable th, td {
-    border: 1px solid var(--thirdColor);
-    collapse: collapse;
+.eventTable th,
+.eventTable td {
+    border: 1px solid var(--line);
+    padding: 7px 9px;
+    text-align: left;
 }
-input{
-    margin: 5px;
+.eventTable th {
+    background: var(--surface-hi);
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
 }
+.eventTable th:hover { color: var(--text); }
+.eventTable tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+
 .loader {
     width: 30px;
     aspect-ratio: 2;
-    --_g: no-repeat radial-gradient(circle closest-side,var(--secondColor) 90%,#0000);
+    --_g: no-repeat radial-gradient(circle closest-side, var(--accent) 90%, #0000);
     background:
-            var(--_g) 0%   50%,
-            var(--_g) 50%  50%,
-            var(--_g) 100% 50%;
-    background-size: calc(100%/3) 50%;
+        var(--_g) 0%   50%,
+        var(--_g) 50%  50%,
+        var(--_g) 100% 50%;
+    background-size: calc(100% / 3) 50%;
     animation: l3 1s infinite linear;
 }
 @keyframes l3 {
-    20%{background-position:0%   0%, 50%  50%,100%  50%}
-    40%{background-position:0% 100%, 50%   0%,100%  50%}
-    60%{background-position:0%  50%, 50% 100%,100%   0%}
-    80%{background-position:0%  50%, 50%  50%,100% 100%}
-}
-.horizontalFlex{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-.experience-grids {
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
-    justify-content: center;
-    align-items: flex-start;
-    margin: 20px 0;
-}
-.experience-grids > div {
-    flex: 1 1 0;
-    min-width: 200px;
-    max-width: 300px;
+    20% { background-position: 0%   0%, 50%  50%, 100%  50%; }
+    40% { background-position: 0% 100%, 50%   0%, 100%  50%; }
+    60% { background-position: 0%  50%, 50% 100%, 100%   0%; }
+    80% { background-position: 0%  50%, 50%  50%, 100% 100%; }
 }
